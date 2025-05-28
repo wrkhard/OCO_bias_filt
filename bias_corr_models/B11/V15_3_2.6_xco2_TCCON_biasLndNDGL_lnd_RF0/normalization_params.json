@@ -1,0 +1,45 @@
+{
+    "X_mean": {
+        "co2_grad_del": -2.2254796028137207,
+        "dpfrac": -0.9493348002433777,
+        "aod_strataer": 0.007635905873030424,
+        "albedo_sco2": 0.16949717700481415,
+        "dust_height": 1.0108505487442017,
+        "water_height": 1.0098626613616943,
+        "h2o_ratio_bc": 1.0066813230514526,
+        "aod_sulfate": 0.015697864815592766,
+        "aod_ice": 0.008467682637274265,
+        "ice_height": 0.09930388629436493,
+        "dws": 0.035906702280044556
+    },
+    "X_std": {
+        "co2_grad_del": 32.76218795776367,
+        "dpfrac": 1.5420624017715454,
+        "aod_strataer": 0.005937562789767981,
+        "albedo_sco2": 0.10322713106870651,
+        "dust_height": 0.10354708880186081,
+        "water_height": 0.2722857892513275,
+        "h2o_ratio_bc": 0.021690605208277702,
+        "aod_sulfate": 0.02186896651983261,
+        "aod_ice": 0.01145104132592678,
+        "ice_height": 0.15910576283931732,
+        "dws": 0.04340101778507233
+    },
+    "y_mean": -0.06689376146732104,
+    "y_std": 1.8413074932986082,
+    "features": [
+        "co2_grad_del",
+        "dpfrac",
+        "aod_strataer",
+        "albedo_sco2",
+        "dust_height",
+        "water_height",
+        "h2o_ratio_bc",
+        "aod_sulfate",
+        "aod_ice",
+        "ice_height",
+        "dws"
+    ],
+    "model_type": "RF",
+    "mode": "LndNDGL"
+}

@@ -1,0 +1,7 @@
+percentile_lnd: 60
+percentile_ocn: 65
+state_threshold: 0.65
+abstention_threshold_lnd: 1.35
+abstention_threshold_ocn: 1.25
+tccon_weighting: True
+class_weight: {'tc_lnd': (1.1, 1.0), 'tc_ocn': (1.0, 1.1), 'sa_lnd': (1.1, 1.0), 'sa_ocn': (1.0, 1.5)}

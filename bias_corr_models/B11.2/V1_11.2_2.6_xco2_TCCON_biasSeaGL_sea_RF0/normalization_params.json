@@ -1,0 +1,39 @@
+{
+    "X_mean": {
+        "albedo_o2a": 0.09756121039390564,
+        "albedo_slope_sco2": 1.6985210095299408e-05,
+        "co2_grad_del": -7.830148696899414,
+        "dp": -0.11155226081609726,
+        "aod_dust": 0.019457466900348663,
+        "h_continuum_o2a": 7.67160177230835,
+        "water_height": 0.8921838998794556,
+        "ice_height": 0.025009695440530777,
+        "sensor_zenith_angle": 30.38007354736328
+    },
+    "X_std": {
+        "albedo_o2a": 0.041064340621232986,
+        "albedo_slope_sco2": 1.0688730071706232e-05,
+        "co2_grad_del": 18.30781364440918,
+        "dp": 2.7788374423980713,
+        "aod_dust": 0.03813864290714264,
+        "h_continuum_o2a": 9.298361778259277,
+        "water_height": 0.25363534688949585,
+        "ice_height": 0.12570229172706604,
+        "sensor_zenith_angle": 9.951672554016113
+    },
+    "y_mean": -0.23458165595111732,
+    "y_std": 1.361118017158482,
+    "features": [
+        "albedo_o2a",
+        "albedo_slope_sco2",
+        "co2_grad_del",
+        "dp",
+        "aod_dust",
+        "h_continuum_o2a",
+        "water_height",
+        "ice_height",
+        "sensor_zenith_angle"
+    ],
+    "model_type": "RF",
+    "mode": "SeaGL"
+}

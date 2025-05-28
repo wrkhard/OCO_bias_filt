@@ -1,0 +1,24 @@
+{
+    "X_mean": {
+        "footprint": 4.5110017584468025,
+        "co2_grad_del": -13.613364219665527,
+        "color_slice_noise_ratio_o2a": 1.625993251800537,
+        "albedo_o2a": 0.0950327143073082
+    },
+    "X_std": {
+        "footprint": 2.2878490210468865,
+        "co2_grad_del": 19.953115463256836,
+        "color_slice_noise_ratio_o2a": 1.2496532201766968,
+        "albedo_o2a": 0.059504296630620956
+    },
+    "y_mean": -0.075906281268192,
+    "y_std": 0.8369175652939432,
+    "features": [
+        "footprint",
+        "co2_grad_del",
+        "color_slice_noise_ratio_o2a",
+        "albedo_o2a"
+    ],
+    "model_type": "RF",
+    "mode": "SeaGL"
+}

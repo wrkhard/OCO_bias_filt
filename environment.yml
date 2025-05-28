@@ -1,0 +1,37 @@
+name: bias_filt_arm64
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - cartopy=0.21.1 # Pinned version
+  - h5py
+  - hdf5
+  - joblib
+  - matplotlib-base
+  - netcdf4
+  - numexpr
+  - pandas
+  - pillow
+  - pyarrow
+  - pyproj
+  - pyshp
+  - scikit-learn
+  - scipy
+  - seaborn
+  - shapely
+  - tqdm
+  - xgboost
+  - affine
+  - attrs
+  - click
+  - click-plugins
+  - cligj
+  - llvmlite 
+  - numba
+  - numpy 
+  - rasterio
+  - shap
+  - slicer
+  - snuggs 
