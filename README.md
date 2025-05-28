@@ -19,7 +19,7 @@ To set up the required Python environment, use the provided `environment.yml` fi
 
 ```bash
 conda env create -f environment.yml
-conda activate bias_filt_arm64
+conda activate bias_filt
 ```
 
 Data paths are managed via `paths.py`. For external data, you may need to set the `OCO_DATA_BASE` environment variable to point to your data directory. See `paths.py` for details.
