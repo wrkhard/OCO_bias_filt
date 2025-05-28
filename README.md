@@ -3,13 +3,15 @@
 ## Overview
 
 This project implements and explores the effect of applying a new bias correction and quality filtering approach to increase the accuracy of atmospheric CO2 measurements derived from the Orbiting Carbon Observatory-2 (OCO-2) satellite. This is not an official OCO-2 data product. For details on the approach, please refer to:
+
+
 https://doi.org/10.22541/essoar.174164198.80749970/v1
+and
 https://doi.org/10.22541/essoar.174164203.37422284/v1
 
 ## License
 
 The source code is licensed under the terms found in the `LICENSE` file.
-The data has a Copyright statement: © 2025 California Institute of Technology. Government sponsorship acknowledged.
 
 ## Setup
 
@@ -141,5 +143,5 @@ The pipeline follows a logical flow:
 
 If you use this code or the resulting data, please cite the following preprints:
 
-https://doi.org/10.22541/essoar.174164198.80749970/v1
+https://doi.org/10.22541/essoar.174164198.80749970/v1 and 
 https://doi.org/10.22541/essoar.174164203.37422284/v1
