@@ -1,4 +1,4 @@
-name: bias_filt_arm64
+name: bias_filt
 channels:
   - conda-forge
   - defaults
