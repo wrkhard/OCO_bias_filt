@@ -114,7 +114,13 @@ bias_correction/14_train_bias_correction_model_spatially_weighted_kfold_validati
 - Corrects systematic biases in XCO2 retrievals
 - Handles both TCCON and Small Area biases
 
-# train filter models (should be run in directory where you want to save optuna trials and plots)
+# Quality Filtering
+run_filter_pipeline.py
+- Optionally runs run_bias_correction_pipeline.py
+- Optionally runs optimize_filter.py
+- Trains and applies ML subfilter and uncertainty filter as described in Part 2, for a given config.
+
+# optimizing filter models (should be run in directory where you want to save optuna trials and plots)
 optimize_filter.py 
 - Optimizes quality filtering parameters
 - Uses Optuna for hyperparameter optimization
@@ -127,6 +133,9 @@ visualization_scripts/vis_bias_corr.py
 - Compares corrected data with TCCON measurements
 - Shows spatial patterns of biases
 - Analyzes performance at land-water crossings
+
+viz_filter_notebook.ipynb
+-plots/figures for Part 2.
 
 The pipeline follows a logical flow:
 1. Data preparation (bias_correction/01_create_initial_parquet.py, bias_correction/02_create_small_areas.py, bias_correction/03_flag_coastal_soundings.py)
