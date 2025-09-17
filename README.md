@@ -13,6 +13,19 @@ https://doi.org/10.22541/essoar.174164203.37422284/v1
 
 The source code is licensed under the terms found in the `LICENSE` file.
 
+## Data Citations
+
+This work utilizes several datasets which we cite below:
+
+### OCO-2 LiteFiles
+
+### Total Carbon Column Observing Network
+
+### Flux Inversions
+
+### EDGAR
+
+
 ## Setup
 
 To set up the required Python environment, use the provided `environment.yml` file with Conda:
