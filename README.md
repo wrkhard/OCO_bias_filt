@@ -13,6 +13,29 @@ https://doi.org/10.22541/essoar.174164203.37422284/v1
 
 The source code is licensed under the terms found in the `LICENSE` file.
 
+## Data Citations
+
+This work utilizes several datasets which we cite below:
+
+### OCO-2 LiteFiles
+https://doi.org/10.5067/8E4VLCK16O6Q
+### Total Carbon Column Observing Network
+https://doi.org/10.14291/TCCON.GGG2020
+### Flux Inversions
+**CarbonTracker CT-NRT. v2022-1** Jacobson, A., Schuldt, K., Tans, P., Andrews, A., Miller, J., & Oda, T. (2023). CarbonTracker CT2022.
+
+**MACC v21r1** https://doi.org/10.1029/2010JD013887
+
+**LoFI m2ccv1bsim** https://doi.org/10.5194/acp-21-9609-2021
+
+**UnivEd v5.2** https://doi.org/10.5194/acp-9-2619-2009
+
+### EDGAR
+**v6.0** http://data.europa.eu/89h/97a67d67-c62e-4826-b873-9d972c4f670b
+### MODIS Cloud Distance
+
+https://doi.org/10.5281/zenodo.4008765
+
 ## Setup
 
 To set up the required Python environment, use the provided `environment.yml` file with Conda:
