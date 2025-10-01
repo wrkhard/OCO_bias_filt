@@ -1,0 +1,66 @@
+# -------------  CONFIG  ------------------------------------------
+CLASS_WEIGHT = dict(
+    tc_lnd=(1.0, 1.0),
+    tc_ocn=(1.3, 1.0),
+    sa_lnd=(1.0, 1.15),
+    sa_ocn=(1.0, 1.0),
+)
+
+
+
+percentile_lnd      = 65,
+percentile_ocn      = 50,
+abstention_threshold_lnd = 1.30,
+abstention_threshold_ocn = 1.05,
+tccon_weighting     = {'land' : True, 'ocean' : True},    
+class_weight        = CLASS_WEIGHT,
+gamma_sa            = 0.003,     
+sa_res_deg          = 4,       
+
+
+
+# Feature lists for the ternary filter
+feats_sa_lnd = [
+    "aod_diff","color_slice_noise_ratio_wco2","albedo_slope_wco2","chi2_o2a",
+    "dp_o2a","t700","xco2_uncertainty","albedo_sco2","h_continuum_sco2",
+    "airmass","h_continuum_wco2","dp_sco2","albedo_o2a","bias_correction_uncert",
+    "color_slice_noise_ratio_sco2","dust_height","h_continuum_o2a","aod_water",
+    "chi2_sco2","ice_height","h2o_scale","albedo_wco2","dp_abp","glint_angle",
+    "albedo_slope_sco2","max_declocking_sco2","aod_dust","max_declocking_o2a",
+    "color_slice_noise_ratio_o2a","zlo_o2a","aod_ice","tcwv","rms_rel_sco2",
+    "aod_sulfate","aod_fine_apriori","co2_ratio_bc","aod_seasalt","chi2_wco2"
+]
+
+feats_sa_ocn = [
+    "h_continuum_wco2","aod_seasalt","h_continuum_o2a","h_continuum_sco2","t700",
+    "ice_height","h2o_scale","tcwv","deltaT","airmass","aod_diff","bias_correction_uncert",
+    "h2o_ratio_bc","dws","glint_angle","co2_ratio_bc","aod_strataer",
+    "aod_ice","aod_sulfate","chi2_wco2","color_slice_noise_ratio_o2a","xco2_uncertainty",
+    "rms_rel_wco2","aod_water","aod_fine_apriori","co2_grad_del","albedo_sco2",
+    "chi2_o2a","dp_sco2","albedo_o2a","chi2_sco2","albedo_wco2","aod_dust",
+    "color_slice_noise_ratio_sco2","zlo_o2a","snr_sco2","rms_rel_o2a","max_declocking_o2a",
+    "snr_wco2","max_declocking_sco2","tcwv_uncertainty","color_slice_noise_ratio_wco2",
+    "rms_rel_sco2","max_declocking_wco2","snr_o2a","albedo_slope_sco2","dust_height",
+    "albedo_slope_wco2","albedo_slope_o2a","aod_oc", "dp_abp"
+]
+
+feats_tc_lnd = [
+    "bias_correction_uncert","altitude_stddev","co2_ratio_bc","t700","airmass","aod_sulfate",
+    "aod_fine_apriori","aod_water","h2o_scale","tcwv","aod_diff","rms_rel_sco2","co2_grad_del",
+    "rms_rel_wco2","albedo_o2a","tcwv_uncertainty","aod_dust","albedo_sco2","albedo_wco2",
+    "snr_sco2","rms_rel_o2a","deltaT","zlo_o2a","snr_o2a","h2o_ratio_bc",
+    "aod_ice","h_continuum_o2a","dws","h_continuum_wco2","h_continuum_sco2","xco2_uncertainty",
+    "chi2_sco2","ice_height","albedo_slope_sco2","albedo_slope_wco2","dp","aod_oc","snr_wco2",
+    "dpfrac","aod_strataer","color_slice_noise_ratio_wco2","chi2_o2a","max_declocking_sco2",
+    "color_slice_noise_ratio_sco2","chi2_wco2","aod_seasalt"
+]
+
+feats_tc_ocn = [
+    "aod_diff","color_slice_noise_ratio_wco2","albedo_slope_wco2","chi2_o2a","dp_o2a","t700",
+    "xco2_uncertainty","albedo_sco2","h_continuum_sco2","airmass","h_continuum_wco2","dp_sco2",
+    "albedo_o2a","bias_correction_uncert","color_slice_noise_ratio_sco2","dust_height",
+    "h_continuum_o2a","aod_water","chi2_sco2","ice_height","h2o_scale","albedo_wco2",
+    "glint_angle","albedo_slope_sco2","max_declocking_sco2","aod_dust","max_declocking_o2a",
+    "color_slice_noise_ratio_o2a","zlo_o2a","aod_ice","tcwv","rms_rel_sco2","aod_sulfate",
+    "aod_fine_apriori","co2_ratio_bc","aod_seasalt","chi2_wco2", "dp_abp"
+]
