@@ -42,8 +42,8 @@ path = '/Volumes/OCO/LiteFiles/B11_gamma/'
 
 # abstention filtering threshold on bias_correciton_uncert DEFAULT is 1.23 [ppm]
 # value greater than 1.23 increases throughput in largely dusty regions such as N. Africa. Smaller values will remove more of the tropics.
-ABSTENTION_THRESHOLD_LND = 1.45
-ABSTENTION_THRESHOLD_OCN = 0.85
+ABSTENTION_THRESHOLD_LND = 1.3
+ABSTENTION_THRESHOLD_OCN = 1.05
 
 TCCON = True  # use TCCON data only
 save_fig = False   # save figures to hard drive

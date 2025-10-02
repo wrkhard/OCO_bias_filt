@@ -41,8 +41,8 @@ EXPORT_LITE_PATH = paths.EXPORT_DIR / 'B11.2_ML'
 
 # abstention filtering threshold on bias_correciton_uncert DEFAULT is 1.23 [ppm]
 # value greater than 1.23 increases throughput in largely dusty regions such as N. Africa. Smaller values will remove more of the tropics.
-ABSTENTION_THRESHOLD_LND = 1.35
-ABSTENTION_THRESHOLD_OCN = 1.25
+ABSTENTION_THRESHOLD_LND = 1.3
+ABSTENTION_THRESHOLD_OCN = 1.05
 
 # Lite file name identifier (e.g. B11100Ar)
 LITE_FILE_ID = 'B11210Ar'

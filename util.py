@@ -1149,7 +1149,7 @@ def bias_correct(path: Path, data, vars_to_correct, uq = False, proxy_name = 'TC
     return data
 
 
-def construct_filter(data, path_tc_lnd: Path, path_tc_ocn: Path, path_sa_lnd: Path, path_sa_ocn: Path, abstention_threshold_lnd = 1.35, abstention_threshold_ocn = 1.25):
+def construct_filter(data, path_tc_lnd: Path, path_tc_ocn: Path, path_sa_lnd: Path, path_sa_ocn: Path, abstention_threshold_lnd = 1.3, abstention_threshold_ocn = 1.05):
     ''' Construct the ternary filter flag for B112
 
     :param path_tc_lnd: Path, path to tccon land model directory

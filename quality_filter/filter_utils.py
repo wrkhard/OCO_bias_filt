@@ -210,7 +210,7 @@ def build_ternary_filter(
         feats_tccon_all,               # (land_feats , ocean_feats)
         percentile_lnd      = 70,
         percentile_ocn      = 50,
-        abstention_threshold_lnd = 1.25,
+        abstention_threshold_lnd = 1.3,
         abstention_threshold_ocn = 1.05,
         tccon_weighting     = True,    # bool or {"land":…, "ocean":…}
         class_weight        = None,
