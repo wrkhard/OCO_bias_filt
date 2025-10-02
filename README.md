@@ -150,6 +150,11 @@ optimize_filter.py
 - Balances data quality and throughput
 - Has separate optimization for land and ocean soundings
 
+# Apply trained bias correction and filtering model
+bias_correction/15_Export_Lite_Files.py
+
+
+
 # additional plots (optional)
 visualization_scripts/vis_bias_corr.py
 - Creates visualization plots of bias correction results
