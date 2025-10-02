@@ -6,8 +6,6 @@
 # export the three vars to new Lite file
 
 
-
-
 # make sure you have all of those packages installed in your conda envirnoment
 import pandas as pd
 import glob
@@ -25,20 +23,20 @@ from pathlib import Path
 
 
 # Make Changes *************************************************************************************
-# Bias correction model directory paths (Now loaded from paths.py)
+# Bias correction model directory paths
 TC_LND_CORR_PATH = paths.TC_LND_CORR_MODEL
 TC_OCN_CORR_PATH = paths.TC_OCN_CORR_MODEL
 SA_LND_CORR_PATH = paths.SA_LND_CORR_MODEL
 SA_OCN_CORR_PATH = paths.SA_OCN_CORR_MODEL
 
-# filter model paths (Now loaded from paths.py)
+# filter model paths
 TC_LND_FILT_PATH = paths.TC_LND_FILTER_MODEL
 TC_OCN_FILT_PATH = paths.TC_OCN_FILTER_MODEL
 SA_LND_FILT_PATH = paths.SA_LND_FILTER_MODEL
 SA_OCN_FILT_PATH = paths.SA_OCN_FILTER_MODEL
 
 # lite files paths
-LITE_PATH = paths.OCO_LITE_FILES_DIR / 'B11.2_OCO2'
+LITE_PATH = paths.OCO_LITE_FILES_DIR
 EXPORT_LITE_PATH = paths.EXPORT_DIR / 'B11.2_ML'
 
 # abstention filtering threshold on bias_correciton_uncert DEFAULT is 1.23 [ppm]
@@ -125,7 +123,7 @@ paths.ensure_dir_exists(EXPORT_LITE_PATH)
 
 
 # copy files from LITE_PATH to EXPORT_LITE_PATH
-lite_files = sorted(list(LITE_PATH.glob('*oco2_LtCO2_24*.nc4')))
+lite_files = sorted(list(LITE_PATH.glob('*oco2_LtCO2*.nc4')))
 lite_files.sort()
 
 if DEBUG:
@@ -239,7 +237,7 @@ for j in tqdm(range(len(lite_files))):
     #  add ternary flag
     data = construct_filter(data, **kwargs)
 
-    # set 'pre-filtered' data to '2' in xco2_quality_flag_b112
+    # sets 'pre-filtered' data to '2' in xco2_quality_flag_b112
     data = pre_filter(data)
 
 

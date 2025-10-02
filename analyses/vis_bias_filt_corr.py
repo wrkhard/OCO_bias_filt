@@ -18,13 +18,13 @@ from util import load_data, plot_tccon, plot_map, get_season, normalize_per_SA, 
 
 
 # make changes #############################
-# Bias correction model directory paths (Now using paths from paths.py)
+# Bias correction model directory paths
 TC_LND_CORR_PATH = paths.TC_LND_CORR_MODEL
 TC_OCN_CORR_PATH = paths.TC_OCN_CORR_MODEL
 SA_LND_CORR_PATH = paths.SA_LND_CORR_MODEL
 SA_OCN_CORR_PATH = paths.SA_OCN_CORR_MODEL
 
-# filter model paths (Now using paths from paths.py)
+# filter model paths
 TC_LND_FILT_PATH = paths.TC_LND_FILTER_MODEL
 TC_OCN_FILT_PATH = paths.TC_OCN_FILTER_MODEL
 SA_LND_FILT_PATH = paths.SA_LND_FILTER_MODEL
