@@ -3,9 +3,9 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.10
+  - python=3.9
   - pip
-  - cartopy=0.21.1 # Pinned version
+  - cartopy=0.21.1
   - h5py
   - hdf5
   - joblib
@@ -17,7 +17,7 @@ dependencies:
   - pyarrow
   - pyproj
   - pyshp
-  - scikit-learn
+  - scikit-learn=1.2
   - scipy
   - seaborn
   - shapely
