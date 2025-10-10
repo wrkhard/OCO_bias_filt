@@ -47,11 +47,11 @@ ABSTENTION_THRESHOLD_OCN = 1.05
 # Lite file name identifier (e.g. B11100Ar)
 LITE_FILE_ID = 'B11210Ar'
 # new Lite file name identifier after models are applied (e.g. B11Gamma)
-New_LITE_FILE_ID = 'B112ML'
+New_LITE_FILE_ID = 'B112v2ML'
 
 # debugging mode : only uses first 10 litefiles
 COPY_LITE_FILES = True
-DEBUG = True
+DEBUG = False
 # **************************************************************************************************
 fill_value = -999999
 
@@ -258,7 +258,7 @@ for j in tqdm(range(len(lite_files))):
             value = ds.createVariable('xco2_ML', np.float32, 'sounding_id')
             value.units = 'ppm'
             value.long_name = 'XCO2 Machine Learning corrected'
-            value.comment = 'Column-averaged dry-air mole fraction of CO2, including bias correction, on X2019 scale. Further described in Mauceri et. al. 2025 "Uncertainty-aware Machine Learning Bias Correction and Filtering for OCO-2: Part 1" https://doi.org/10.22541/essoar.174164198.80749970/v1'
+            value.comment = 'Column-averaged dry-air mole fraction of CO2, including bias correction, on X2019 scale, based on ACOS v11.2. Further described in Mauceri et. al. 2025 "Uncertainty-aware Machine Learning Bias Correction and Filtering for OCO-2: Part 1" https://doi.org/10.1029/2025EA004328'
             value[:] = data.loc[:,'xco2_ML'].to_numpy().astype(np.float32)
             # add global attribute of what model we used for bias correction
             # Use the path variables directly
@@ -271,7 +271,7 @@ for j in tqdm(range(len(lite_files))):
             value = ds.createVariable('xco2_quality_flag_ML', np.intc, 'sounding_id')
             value.units = 'ternary : 0 = best quality data, 1 = good quality data for increasing sounding throughput if needed, 2 = poor quality data'
             value.long_name = 'XCO2 ternary quality flag'
-            value.comment = 'Derieved from two machine learning models and uncertainty of the bias correction estimate. Further described in Keely et. al. 2025 "Uncertainty-aware Machine Learning Bias Correction and Filtering for OCO-2: Part 2" https://doi.org/10.22541/essoar.174164203.37422284/v1'
+            value.comment = 'Derived from two machine learning models and uncertainty of the bias correction estimate. Further described in Keely et. al. 2025 "Uncertainty-aware Machine Learning Bias Correction and Filtering for OCO-2: Part 2" https://doi.org/10.1029/2025EA004329'
             value[:] = data.loc[:,'xco2_quality_flag_ML'].to_numpy().astype(np.float32)
             # add global attribute of what model we used for quality filtering
             # Use the path variables directly
