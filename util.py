@@ -1,4 +1,6 @@
 # util functions
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend to prevent automatic display
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -752,7 +754,13 @@ def Earth_Map_Raster(raster, MIN, MAX, var_name, Title, Save=False, Save_Name: s
     gl = ax.gridlines(draw_labels=True)
     gl.top_labels = False
     gl.right_labels = False
-    im = ax.imshow(np.flipud(raster), interpolation='nearest', origin='lower',
+    # Handle NaN values by creating a masked array
+    raster_masked = np.ma.masked_invalid(np.flipud(raster))
+    
+    # Handle NaN values by setting a specific color for them
+    colormap.set_bad('white', alpha=0)  # Set NaN values to transparent white
+    
+    im = ax.imshow(raster_masked, interpolation='nearest', origin='lower',
                    extent=np.array(limits)+offset, cmap=colormap, vmin=MIN, vmax=MAX,
                    transform=ccrs.PlateCarree(), alpha=0.9)
 
