@@ -1,6 +1,8 @@
 # make a few plots of the exported lite files to make sure they are correct
 # 10/2022 Steffen Mauceri
 
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend to prevent automatic display
 import numpy as np
 import pandas as pd
 import glob
@@ -28,8 +30,8 @@ def get_all_headers_with_dims(f):
     return headers, dims
 
 
-year = 2015
-frac = 0.5 # fraction of data to load
+year = 2023
+frac = 1 # fraction of data to load
 name_all = 'LiteFileExport_' + str(year) + '_'
 save_fig = True
 Lite_file_path = '/Volumes/OCO/LiteFiles/export/B11.2_ML/'
@@ -223,9 +225,9 @@ with open(save_path + 'SA_bias.txt', 'w') as f:
 
         # write to txt file
         f.write('Quality Flag: ' + str(qf) + '\n')
-        f.write('xco2_gamma_SA_bias_mean: ' + str(xco2b112_SA_bias_mean) + '\n')
+        f.write('xco2_ML_SA_bias_mean: ' + str(xco2b112_SA_bias_mean) + '\n')
         f.write('xco2_SA_bias_mean: ' + str(xco2_SA_bias_mean) + '\n')
-        f.write('xco2_gamma_SA_bias_std: ' + str(xco2b112_SA_bias_std) + '\n')
+        f.write('xco2_ML_SA_bias_std: ' + str(xco2b112_SA_bias_std) + '\n')
         f.write('xco2_SA_bias_std: ' + str(xco2_SA_bias_std) + '\n')
 
 
@@ -235,10 +237,10 @@ data.loc[:,'ML-Raw'] = data.loc[:,'xco2_ML'] - data.loc[:,'xco2_raw']
 data.loc[:,'B11-Raw'] = data.loc[:,'xco2'] - data.loc[:,'xco2_raw']
 data_all = data.copy()
 for qf in [0, 1, 2]:
-    data = data_all.loc[data_all['xco2_quality_flag_gamma'] == qf]
+    data = data_all.loc[data_all['xco2_quality_flag_ML'] == qf]
     name = name_all + 'QF' + str(qf)
     plot_map(data, ['ML-Raw', 'ML-B11', 'B11-Raw'], save_fig=save_fig, path=save_path, name=name, pos_neg_IO=True, min=-1,max=1)
-    plot_map(data, ['bias_correction_uncert'], save_fig=save_fig, path=save_path, name=name, pos_neg_IO=False)
+    plot_map(data, ['bias_correction_uncert_ML'], save_fig=save_fig, path=save_path, name=name, pos_neg_IO=False)
 
 
 
