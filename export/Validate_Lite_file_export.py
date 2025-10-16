@@ -9,7 +9,9 @@ import glob
 import netCDF4 as nc
 from tqdm import tqdm
 import os
+from pathlib import Path
 from util import plot_map, dist
+import paths
 
 def get_all_headers_with_dims(f):
     headers = []
@@ -28,6 +30,158 @@ def get_all_headers_with_dims(f):
             headers.append(full_var_name)
             dims.append(var.ndim)
     return headers, dims
+
+
+def load_tccon_data():
+    """
+    Load TCCON data from NetCDF files.
+    Returns a DataFrame with TCCON measurements.
+    """
+    print('Loading TCCON data...')
+    
+    # TCCON data parameters
+    time_max = 1*60*60  # 1 hour in seconds
+    lat_lon_max = 2  # 2 degrees
+    
+    # TCCON data path
+    tccon_data_path = paths.TCCON_FILES_DIR
+    
+    # Variables to extract from TCCON files
+    t_vars = ['lat', 'long', 'xco2_x2019', 'time', 'year', 'day']
+    
+    # Load TCCON data
+    data_all = []
+    name_all = []
+    TCCON_files = sorted(list(Path(tccon_data_path).glob('*.nc')))
+    
+    for f in TCCON_files:
+        t_ds = nc.Dataset(f)
+        t_ids = t_ds['lat'][:]
+        # initialize array
+        t_data = np.ones((len(t_ids), len(t_vars))) * np.nan
+        
+        i = -1
+        for v in t_vars:
+            i += 1
+            t_data[:, i] = t_ds[v][:]
+        
+        # append data to list
+        data_all.append(t_data)
+        # add name
+        name = t_ds.long_name
+        # remove numbers from name
+        name = name.split('0')[0]
+        # add to name_all list
+        name_all.append([name] * len(t_data))
+    
+    # merge TCCON data and names
+    data_all = np.concatenate(data_all)
+    name_all = np.concatenate(name_all)
+    
+    t_data = pd.DataFrame(data_all, columns=t_vars)
+    t_data['tccon_name'] = name_all
+    
+    # rename xco2_x2019 to xco2
+    t_data.rename(columns={'xco2_x2019': 'xco2'}, inplace=True)
+    
+    print(f'Loaded {len(t_data)} TCCON measurements from {len(TCCON_files)} files')
+    return t_data
+
+
+def match_tccon_to_soundings(data, tccon_data):
+    """
+    Match OCO-2 soundings to TCCON measurements.
+    Returns data with added TCCON columns.
+    """
+    print('Matching soundings to TCCON...')
+    
+    time_max = 1*60*60  # 1 hour in seconds
+    lat_lon_max = 2  # 2 degrees
+    
+    # Initialize TCCON columns
+    data['xco2tccon'] = np.nan
+    data['tccon_name'] = ''
+    data['tccon_dist'] = np.nan
+    
+    # Get unique years in the data
+    years = data['time'].apply(lambda x: pd.Timestamp(x, unit='s').year).unique()
+    
+    for year in years:
+        print(f'Processing year: {year}')
+        
+        # Filter data for this year
+        year_data = data[data['time'].apply(lambda x: pd.Timestamp(x, unit='s').year) == year]
+        
+        # Filter TCCON data for this year
+        tccon_year = tccon_data[tccon_data['year'] == year]
+        
+        if len(tccon_year) == 0:
+            continue
+            
+        # Process in daily chunks for efficiency
+        for day in tqdm(range(365), desc=f'Processing {year}'):
+            day_time = day * 24 * 60 * 60 + year_data['time'].iloc[0] if len(year_data) > 0 else 0
+            
+            # Subset data for this day
+            data_day = year_data[(year_data['time'] >= day_time) & 
+                                (year_data['time'] < day_time + 24 * 60 * 60)]
+            tccon_day = tccon_year[(tccon_year['time'] >= day_time - time_max) & 
+                                  (tccon_year['time'] < day_time + 24 * 60 * 60 + time_max)]
+            
+            if len(data_day) == 0 or len(tccon_day) == 0:
+                continue
+                
+            # Get coordinates
+            lat_oco = data_day['latitude'].values
+            lon_oco = data_day['longitude'].values
+            time_oco = data_day['time'].values
+            
+            lat_tccon = tccon_day['lat'].values
+            lon_tccon = tccon_day['long'].values
+            time_tccon = tccon_day['time'].values
+            xco2_tccon = tccon_day['xco2'].values
+            name_tccon = tccon_day['tccon_name'].values
+            
+            # Match each OCO-2 sounding
+            for i, (lat_i, lon_i, time_i) in enumerate(zip(lat_oco, lon_oco, time_oco)):
+                # Find TCCON measurements within spatial and temporal windows
+                spatial_mask = (np.abs(lat_i - lat_tccon) < lat_lon_max) & \
+                              (np.abs(lon_i - lon_tccon) < lat_lon_max)
+                temporal_mask = np.abs(time_i - time_tccon) < time_max
+                match_mask = spatial_mask & temporal_mask
+                
+                if np.any(match_mask):
+                    # Get matching TCCON data
+                    match_lat = lat_tccon[match_mask]
+                    match_lon = lon_tccon[match_mask]
+                    match_time = time_tccon[match_mask]
+                    match_xco2 = xco2_tccon[match_mask]
+                    match_name = name_tccon[match_mask]
+                    
+                    # Calculate distances
+                    distances = [dist(lat_i, lat_j, lon_i, lon_j) for lat_j, lon_j in zip(match_lat, match_lon)]
+                    
+                    # Check if all matches are from the same station
+                    unique_names = np.unique(match_name)
+                    if len(unique_names) == 1:
+                        # All matches from same station - use median
+                        data_idx = data_day.index[i]
+                        data.loc[data_idx, 'xco2tccon'] = np.nanmedian(match_xco2)
+                        data.loc[data_idx, 'tccon_name'] = unique_names[0]
+                        data.loc[data_idx, 'tccon_dist'] = np.nanmean(distances)
+                    else:
+                        # Multiple stations - use closest
+                        closest_idx = np.argmin(distances)
+                        data_idx = data_day.index[i]
+                        data.loc[data_idx, 'xco2tccon'] = match_xco2[closest_idx]
+                        data.loc[data_idx, 'tccon_name'] = match_name[closest_idx]
+                        data.loc[data_idx, 'tccon_dist'] = distances[closest_idx]
+    
+    # Count matches
+    n_matches = np.sum(data['xco2tccon'] > 0)
+    print(f'Found {n_matches} TCCON matches out of {len(data)} soundings')
+    
+    return data
 
 
 year = 2023
@@ -175,6 +329,10 @@ for f in Features:
         feature_dict[f] = features_clean
 data.rename(columns=feature_dict, inplace=True)
 
+# Load and match TCCON data ****************************************************
+print('Loading and matching TCCON data...')
+tccon_data = load_tccon_data()
+data = match_tccon_to_soundings(data, tccon_data)
 
 # calculate some stats *********************************************************
 # SA bias
@@ -215,7 +373,8 @@ while i+j < len(data):
             print(str(np.round(i/len(data)*100,3)) + '%')
 
 
-with open(save_path + 'SA_bias.txt', 'w') as f:
+with open(save_path +str(year)+ '_ML_bias_correction_stats.txt', 'w') as f:
+    n_total = len(data)
     for qf in [0, 1, 2]:
         # calculate mean and std of SA bias
         xco2_SA_bias_mean = np.nanmean(SA_bias[data['xco2_quality_flag_ML']==qf])
@@ -223,12 +382,62 @@ with open(save_path + 'SA_bias.txt', 'w') as f:
         xco2_SA_bias_std = np.nanstd(SA_bias[data['xco2_quality_flag_ML']==qf])
         xco2b112_SA_bias_std = np.nanstd(SA_bias_b112[data['xco2_quality_flag_ML']==qf])
 
+        n_qf = len(data[data['xco2_quality_flag_ML']==qf])
+        fraction_qf = n_qf / n_total
+
+        # TCCON validation statistics
+        data_qf = data[data['xco2_quality_flag_ML'] == qf]
+        data_tccon = data_qf[data_qf['xco2tccon'] > 0]  # Only soundings with TCCON matches
+        
+        if len(data_tccon) > 0:
+            # Calculate differences
+            diff_ML = data_tccon['xco2_ML'] - data_tccon['xco2tccon']
+            diff_B112 = data_tccon['xco2'] - data_tccon['xco2tccon']
+            diff_raw = data_tccon['xco2_raw'] - data_tccon['xco2tccon']
+            
+            # Calculate RMSE
+            rmse_ML = np.sqrt(np.nanmean(diff_ML**2))
+            rmse_B112 = np.sqrt(np.nanmean(diff_B112**2))
+            rmse_raw = np.sqrt(np.nanmean(diff_raw**2))
+            
+            # Calculate std and median
+            std_ML = np.nanstd(diff_ML)
+            std_B112 = np.nanstd(diff_B112)
+            std_raw = np.nanstd(diff_raw)
+            
+            median_ML = np.nanmedian(diff_ML)
+            median_B112 = np.nanmedian(diff_B112)
+            median_raw = np.nanmedian(diff_raw)
+            
+            n_tccon = len(data_tccon)
+        else:
+            rmse_ML = rmse_B112 = rmse_raw = np.nan
+            std_ML = std_B112 = std_raw = np.nan
+            median_ML = median_B112 = median_raw = np.nan
+            n_tccon = 0
+
         # write to txt file
         f.write('Quality Flag: ' + str(qf) + '\n')
+        f.write('Fraction of data: ' + str(fraction_qf) + '\n')
+        f.write('Number of data points: ' + str(n_qf) + '\n')
         f.write('xco2_ML_SA_bias_mean: ' + str(xco2b112_SA_bias_mean) + '\n')
         f.write('xco2_SA_bias_mean: ' + str(xco2_SA_bias_mean) + '\n')
         f.write('xco2_ML_SA_bias_std: ' + str(xco2b112_SA_bias_std) + '\n')
         f.write('xco2_SA_bias_std: ' + str(xco2_SA_bias_std) + '\n')
+        
+        # TCCON validation results
+        f.write('\n--- TCCON Validation ---\n')
+        f.write('Number of TCCON matches: ' + str(n_tccon) + '\n')
+        f.write('xco2_ML_TCCON_RMSE: ' + str(rmse_ML) + '\n')
+        f.write('xco2_B112_TCCON_RMSE: ' + str(rmse_B112) + '\n')
+        f.write('xco2_raw_TCCON_RMSE: ' + str(rmse_raw) + '\n')
+        f.write('xco2_ML_TCCON_std: ' + str(std_ML) + '\n')
+        f.write('xco2_B112_TCCON_std: ' + str(std_B112) + '\n')
+        f.write('xco2_raw_TCCON_std: ' + str(std_raw) + '\n')
+        f.write('xco2_ML_TCCON_median: ' + str(median_ML) + '\n')
+        f.write('xco2_B112_TCCON_median: ' + str(median_B112) + '\n')
+        f.write('xco2_raw_TCCON_median: ' + str(median_raw) + '\n')
+        f.write('\n')
 
 
 # visualize data ***************************************************************
